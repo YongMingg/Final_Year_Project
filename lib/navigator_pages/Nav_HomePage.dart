@@ -1,8 +1,9 @@
-import 'package:final_year_project/routes/0_routes_lib.dart';
+import 'package:final_year_project/routes/DevicePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NavHomePage extends StatefulWidget {
   const NavHomePage({super.key});
@@ -57,27 +58,36 @@ class _NavHomePageState extends State<NavHomePage> {
                       shrinkWrap: true, // ajust height with content
                       query: FirebaseDatabase.instance.ref("${user!.uid}/devices"),
                       itemBuilder: (context, snapshot, animation, index) {
-                        return Card(
-                          color: Colors.amber[100],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: ListTile(
-                            minVerticalPadding: 30,
-                            leading: CircleAvatar(
-                              backgroundColor: (snapshot.child("Digital").value.toString() == "true") ? Colors.green: Colors.red,
-                              radius: 10,
+                        return InkWell(
+                          onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder:(context) {
+                                    return DevicePage(index: index);
+                                },)
+                              );
+                          },
+                          child: Card(
+                            color: Colors.amber[100],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            minLeadingWidth: 20,
-                            title: Text(snapshot.child("DeviceName").value.toString()),
-                            titleTextStyle: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Colors.black,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: ListTile(
+                              minVerticalPadding: 30,
+                              leading: CircleAvatar(
+                                backgroundColor: (snapshot.child("Digital").value.toString() == "true") ? Colors.green: Colors.red,
+                                radius: 10,
+                              ),
+                              minLeadingWidth: 20,
+                              title: Text(snapshot.child("DeviceName").value.toString()),
+                              titleTextStyle: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                              subtitle: Text((snapshot.child("Digital").value.toString() == "true") ? "Status: On" : "Status: Off" ),
+                              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 28, color: Colors.grey.shade700,),
                             ),
-                            subtitle: Text((snapshot.child("Digital").value.toString() == "true") ? "Status: On" : "Status: Off" ),
-                            trailing: Icon(Icons.arrow_forward_ios_rounded, size: 28, color: Colors.grey.shade700,),
                           ),
                         );
                       },
