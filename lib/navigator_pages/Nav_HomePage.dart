@@ -62,7 +62,7 @@ class _NavHomePageState extends State<NavHomePage> {
                           onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(builder:(context) {
-                                    return DevicePage(index: index);
+                                    return DevicePage(index: index, status: snapshot.child("Digital").value.toString());
                                 },)
                               );
                           },
@@ -71,6 +71,7 @@ class _NavHomePageState extends State<NavHomePage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
+                            elevation: 5,
                             margin: const EdgeInsets.only(bottom: 10),
                             child: ListTile(
                               minVerticalPadding: 30,
