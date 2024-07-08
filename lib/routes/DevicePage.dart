@@ -54,6 +54,25 @@ class _DevicePageState extends State<DevicePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert, size: 30, color: Colors.white,),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: const Text("Rename Device", style: TextStyle(fontSize: 16,)),
+                onTap: () {
+                  
+                },
+              ),
+              PopupMenuItem(
+                child: const Text("Delete Device", style: TextStyle(fontSize: 16,)),
+                onTap: () {
+                  
+                },
+              ),
+            ],
+          ),
+        ],
       ),
 
       body: Center(
