@@ -12,27 +12,42 @@ class _NavAddDevicePageState extends State<NavAddDevicePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(30, 30, 30, 25),
-          child: InkWell(
-            onTap: () {
-              Get.toNamed("/AddDevicePage");
-            },
-            child: _showBar(icon: Icons.lightbulb_outline, text: "Devices")
+    return Scaffold(
+
+      appBar: AppBar(
+        backgroundColor: Colors.blue,  
+        title: const Text(
+          "Add Device",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        Container(
-          margin: const EdgeInsets.fromLTRB(30, 30, 30, 25),
-          child: InkWell(
-            onTap: () {
-              Get.toNamed("/AddSensorPage");
-            },
-            child: _showBar(icon: Icons.sensors, text: "Sensor")
+      ),
+
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(30, 30, 30, 25),
+            child: InkWell(
+              onTap: () {
+                Get.toNamed("/AddDevicePage");
+              },
+              child: _showBar(icon: Icons.lightbulb_outline, text: "Devices")
+            ),
           ),
-        ),
-      ],
+          Container(
+            margin: const EdgeInsets.fromLTRB(30, 30, 30, 25),
+            child: InkWell(
+              onTap: () {
+                Get.toNamed("/AddSensorPage");
+              },
+              child: _showBar(icon: Icons.sensors, text: "Sensor")
+            ),
+          ),
+        ],
+      ),
     );
   }
 
