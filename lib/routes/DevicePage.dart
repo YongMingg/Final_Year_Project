@@ -4,11 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DevicePage extends StatefulWidget {
-  final String status;
+  final DataSnapshot dataSnapshot;
   final int index;
-  const DevicePage({super.key, required this.index, required this.status});
+  const DevicePage({super.key, required this.dataSnapshot, required this.index});
 
   @override
   State<DevicePage> createState() => _DevicePageState();
@@ -21,12 +22,16 @@ class _DevicePageState extends State<DevicePage> {
   int sliderCurrentValue = 0;
   Timer? debounceTimer; //use to limited setState
   late bool isButtonOn;
+  TextEditingController renameDeviceController = TextEditingController();
+  TextEditingController renamedDeviceController = TextEditingController();
+  late DataSnapshot dataSnapshot;
+  bool isRenamed = false;
 
   @override
   void initState() {
     super.initState();
     
-    if (widget.status == "true") {
+    if (widget.dataSnapshot.child("Digital").value.toString() == "true") {
       isButtonOn = false;
     } else {
       isButtonOn = true;
@@ -62,12 +67,85 @@ class _DevicePageState extends State<DevicePage> {
                 child: const Text("Rename Device", style: TextStyle(fontSize: 16,)),
                 onTap: () {
                   
+                  // Set the device name to the controller
+                  renameDeviceController.text = widget.dataSnapshot.child("DeviceName").value.toString();
+
+                  //show rename dialog
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      title: const Text("Rename Device"),
+                      content: SingleChildScrollView(
+                        child: TextField(
+                          controller: isRenamed ? renamedDeviceController : renameDeviceController,
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: (){
+                            Navigator.of(context).pop("Cancel");  //make the dialog disappear and transfer message
+                          }, 
+                          child: const Text("Cancel")
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            if (renameDeviceController.text.isEmpty) {
+                              _toast(msg: "Device name cannot be empty");
+                            } else{
+                              if (isRenamed == false) {
+                                isRenamed = true;
+                                renamedDeviceController.text = renameDeviceController.text;
+                                FirebaseDatabase.instance.ref("${user!.uid}/devices/${widget.dataSnapshot.key}").update({"DeviceName": renameDeviceController.text}).then((onValue){
+                                  _toast(msg: "Rename successful");
+                                  Navigator.of(context).pop("Done");  //make the dialog disappear and transfer message
+                                });
+                              }else{
+                                if (renamedDeviceController.text.isEmpty) {
+                                  _toast(msg: "Device name cannot be empty");
+                                }else{
+                                  FirebaseDatabase.instance.ref("${user!.uid}/devices/${widget.dataSnapshot.key}").update({"DeviceName": renamedDeviceController.text}).then((onValue){
+                                    _toast(msg: "Rename successful");
+                                    Navigator.of(context).pop("Done");  //make the dialog disappear and transfer message
+                                  });
+                                }
+                              }
+                            }
+                          }, 
+                          child: const Text("Rename")
+                        ),
+                      ],
+                    );
+                  });
                 },
               ),
               PopupMenuItem(
                 child: const Text("Delete Device", style: TextStyle(fontSize: 16,)),
                 onTap: () {
-                  
+
+                  //show delete dialog
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      title: const Text("Delete Device"),
+                      content: const Text("Are you sure you want to delete this device?"),
+                      actions: [
+                        TextButton(
+                          onPressed: (){
+                            Navigator.of(context).pop();  //make the dialog disappear and transfer message
+                          }, 
+                          child: const Text("No")
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            FirebaseDatabase.instance.ref("${user!.uid}/devices/${widget.dataSnapshot.key}").remove().then((onValue){
+                              _toast(msg: "Device delete successful");
+                              Navigator.of(context).pop();  //make the dialog disappear and transfer message
+                              Navigator.of(context).pop();
+                            });
+                          }, 
+                          child: const Text("Yes")
+                        ),
+                      ],
+                    );
+                  });
                 },
               ),
             ],
@@ -238,4 +316,22 @@ class _DevicePageState extends State<DevicePage> {
     ),
     );
   }
+
+  void _toast({required String msg}){
+    // Show a toast message with the given message
+    Fluttertoast.showToast(
+      // Set the message of the toast
+      msg: msg,
+      // Set the length of the toast
+      toastLength: Toast.LENGTH_LONG,    
+      // Set the gravity of the toast
+      gravity: ToastGravity.BOTTOM,     
+      // Set the time for the toast
+      timeInSecForIosWeb: 2,
+      backgroundColor: Colors.grey[800],
+      textColor: Colors.white,        
+      fontSize: 16.0                    
+    );
+  }
+
 }

@@ -11,7 +11,7 @@ class NavHomePage extends StatefulWidget {
   @override
   State<NavHomePage> createState() => _NavHomePageState();
 }
-//wym@gmail.com password
+
 class _NavHomePageState extends State<NavHomePage> {
 
   User? user = FirebaseAuth.instance.currentUser;
@@ -62,7 +62,7 @@ class _NavHomePageState extends State<NavHomePage> {
                           onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(builder:(context) {
-                                    return DevicePage(index: index, status: snapshot.child("Digital").value.toString());
+                                    return DevicePage(dataSnapshot: snapshot, index: index);
                                 },)
                               );
                           },
