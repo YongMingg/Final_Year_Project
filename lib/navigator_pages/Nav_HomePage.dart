@@ -1,4 +1,5 @@
 import 'package:final_year_project/routes/DevicePage.dart';
+import 'package:final_year_project/routes/SensorPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -138,22 +139,31 @@ class _NavHomePageState extends State<NavHomePage> {
                       shrinkWrap: true, // ajust height with content
                       query: FirebaseDatabase.instance.ref("${user!.uid}/sensors"),
                       itemBuilder: (context, snapshot, animation, index) {
-                        return Card(
-                          color: Colors.amber[100],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: ListTile(
-                            minVerticalPadding: 30,
-                            minLeadingWidth: 20,
-                            title: Text(snapshot.child("DeviceName").value.toString()),
-                            titleTextStyle: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: Colors.black,
+                        return InkWell(
+                          onTap: () {  //change to sensor page when click
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder:(context) {
+                                    return SensorPage(index: index, dataSnapshot: snapshot,);
+                                },)
+                              );
+                          },
+                          child: Card(
+                            color: Colors.amber[100],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            trailing: Icon(Icons.arrow_forward_ios_rounded, size: 28, color: Colors.grey.shade700,),
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: ListTile(
+                              minVerticalPadding: 30,
+                              minLeadingWidth: 20,
+                              title: Text(snapshot.child("DeviceName").value.toString()),
+                              titleTextStyle: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 28, color: Colors.grey.shade700,),
+                            ),
                           ),
                         );
                       },

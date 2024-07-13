@@ -24,7 +24,6 @@ class _DevicePageState extends State<DevicePage> {
   late bool isButtonOn;
   TextEditingController renameDeviceController = TextEditingController();
   TextEditingController renamedDeviceController = TextEditingController();
-  late DataSnapshot dataSnapshot;
   bool isRenamed = false;
 
   @override
