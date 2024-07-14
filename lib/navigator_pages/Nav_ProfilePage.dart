@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import '../routes/0_routes_lib.dart';
 
 class NavProfilePage extends StatefulWidget {
   const NavProfilePage({super.key});
@@ -129,10 +130,17 @@ class _NavProfilePageState extends State<NavProfilePage> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.book,size: 30,),
-                  title: const Text("Term & Condition", style: TextStyle(fontSize: 20),),
+                  title: const Text("Terms & Conditions", style: TextStyle(fontSize: 20),),
                   trailing: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
-                    
+
+                    //change page
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder:(context) {
+                          return const TermAndConditionPage();
+                      },)
+                    );
+
                   },
                 ),
                 ListTile(
@@ -140,7 +148,14 @@ class _NavProfilePageState extends State<NavProfilePage> {
                   title: const Text("Privacy Policy", style: TextStyle(fontSize: 20),),
                   trailing: const Icon(Icons.arrow_forward_ios_outlined),
                   onTap: () {
-                    
+
+                    //change page
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder:(context) {
+                          return const PrivacyPolicyPage();
+                      },)
+                    );
+
                   },
                 ),
                 const SizedBox(height: 30,),
@@ -153,7 +168,7 @@ class _NavProfilePageState extends State<NavProfilePage> {
                     //show logout dialog
                     showDialog(context: context, builder: (context){
                       return AlertDialog(
-                        title: const Text("Remind!"),
+                        title: const Text("Remind !"),
                         content: const Text("Are you sure to logout?"),
                         actions: [
                           TextButton(

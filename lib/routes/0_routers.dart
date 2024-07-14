@@ -8,5 +8,7 @@ class Routers{
     GetPage(name: "/RegisterPage", page: () => const RegisterPage()),
     GetPage(name: "/AddDevicePage", page: () => const AddDevicePage()),
     GetPage(name: "/AddSensorPage", page: () => const AddSensorPage()),
+    GetPage(name: "/TermAndConditionPage", page: () => const TermAndConditionPage()),
+    GetPage(name: "/PrivacyPolicyPage", page: () => const PrivacyPolicyPage()),
   ];
 }
