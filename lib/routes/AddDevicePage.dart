@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -90,11 +91,23 @@ class _AddDevicePageState extends State<AddDevicePage> {
                             
                             if(deviceNameController.text.isNotEmpty && seletedValue != 0){
                               if(user != null){
+
+                                //add data to realtime database
                                 FirebaseDatabase.instance.ref("${user.uid}/devices").child("PIN_$seletedValue").set({
                                   "DeviceName": deviceNameController.text,
                                   "Analog": 255,
                                   "Digital": false,
                                 });
+
+                                //update counter of user in the Firestore
+                                FirebaseFirestore.instance.collection("Users").doc(user.uid).get().then((value) {
+                                  int counter = value.get("Counter") as int;
+                                  FirebaseFirestore.instance.collection("Users").doc(user.uid).update({
+                                    "Counter": ++counter,
+                                  });
+                                });
+                                
+                                
                                 _toast(msg: "Device added successfully");
                                 Get.back();
                               }
