@@ -161,9 +161,9 @@ class _SensorPageState extends State<SensorPage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 10),
-                                    child: _showText(title: "Data 1: ", text: snapshot.child("Data").value.toString()),
+                                    child: _showText(title: "ldrData: ", text: snapshot.child("Data").value.toString()),
                                   ),
-                                  _showText(title: "Data 2: ", text: snapshot.child("Data2").value.toString()),
+                                  _showText(title: "Voltage(V): ", text: snapshot.child("Data2").value.toString()),
                                 ],
                               ),
                             ),
