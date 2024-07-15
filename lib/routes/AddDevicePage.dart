@@ -16,7 +16,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
   TextEditingController deviceNameController = TextEditingController();  //Text controllers
   int seletedValue = 0;
-  List<int> availablePins = [2, 15, 16, 17, 5, 18]; // Initial available pins
+  List<int> availablePins = [15, 2, 4, 16, 17, 5]; // Initial available pins
   User? user = FirebaseAuth.instance.currentUser;
   bool availablePinsIsEmpty = false;
 
