@@ -204,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
         if (user != null) {
           String uid = user.uid; 
           FirebaseFirestore.instance.collection("Users").doc(uid).update({"LoginStatus": true});
-          Get.offNamed("/HomePage");
+          Get.offAllNamed("/HomePage");
         }
       });
     } on FirebaseAuthException catch (e) {
