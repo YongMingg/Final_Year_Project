@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,97 +27,167 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      //Appbar title
-      appBar: AppBar(
-        backgroundColor: Colors.blue,  
-        title: const Text(
-          "Login",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-
-      //body content
-      body: Padding(
-        padding: const EdgeInsets.only(left: 80, right: 80),
-        child: Center(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Container(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  hintText: "example@email.com",
-                  hintStyle: TextStyle(color: Colors.grey,)
+            children: <Widget>[
+              Container(
+                height: 400,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('img/home_background.png'),
+                    fit: BoxFit.fill
+                  )
                 ),
-              ),
-              const SizedBox(height: 50,),
-        
-              TextField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: "Password",
-                  hintText: "",
-                ),
-                obscureText: true,
-              ),
-              const SizedBox(height: 100,),
-        
-              //login button
-              Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: SizedBox(
-                        height: 45,
-                        child: ElevatedButton(
-                          style: const ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(Colors.purple),
-                            foregroundColor: WidgetStatePropertyAll(Colors.white),
-                          ),
-                          child: const Text("Login", style: TextStyle(fontSize: 19),), 
-                          onPressed: (){
-
-                            //login to account
-                            if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-                              _login();
-                            }else{
-                              //tell user about incorrect information
-                              _toast(msg: "Email or Password cannot be empty");
-                            }
-                            
-                          }, 
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: 30,
+                      width: 80,
+                      height: 200,
+                      child: FadeInUp(duration: const Duration(seconds: 1), child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('img/light_1.png')
+                          )
                         ),
-                      ), 
+                      )),
                     ),
+                    Positioned(
+                      left: 140,
+                      width: 80,
+                      height: 150,
+                      child: FadeInUp(duration: const Duration(milliseconds: 1200), child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('img/light_2.png')
+                          )
+                        ),
+                      )),
+                    ),
+                    Positioned(
+                      right: 40,
+                      top: 40,
+                      width: 80,
+                      height: 150,
+                      child: FadeInUp(duration: const Duration(milliseconds: 1300), child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('img/clock.png')
+                          )
+                        ),
+                      )),
+                    ),
+                    Positioned(
+                      child: FadeInUp(duration: const Duration(milliseconds: 1600), child: Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: const Center(
+                          child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
+                        ),
+                      )),
+                    )
                   ],
                 ),
               ),
-              const SizedBox(height: 15,),
-              
-              InkWell(
-                onTap: () {
-                  Get.toNamed("/RegisterPage");
-                },
-                child: Text("No account? Register now", style: TextStyle(
-                  color: Colors.blue[700],
-                  fontSize: 15,
-                  decoration: TextDecoration.underline,
-                  decorationColor: Colors.blue[700],
-                ),),
-              ),
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  children: <Widget>[
+                    FadeInUp(duration: const Duration(milliseconds: 1800), child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color.fromRGBO(143, 148, 251, 1)),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromRGBO(143, 148, 251, .2),
+                            blurRadius: 20.0,
+                            offset: Offset(0, 10)
+                          )
+                        ]
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
+                            ),
+                            child: TextField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Email",
+                                hintStyle: TextStyle(color: Colors.grey)
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Password",
+                                hintStyle: TextStyle(color: Colors.grey)
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+                    const SizedBox(height: 30,),
 
+                    //login button
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1900), 
+                      child: InkWell(
+                        onTap: () {
+                          //login to account
+                          if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+                            _login();
+                          }else{
+                            //tell user about incorrect information
+                            _toast(msg: "Email or Password cannot be empty");
+                          }
+                        },
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color.fromRGBO(143, 148, 251, 1),
+                                Color.fromRGBO(143, 148, 251, .6),
+                              ]
+                            )
+                          ),
+                          child: const Center(
+                            child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                          ),
+                        ),
+                      )
+                    ),
+                    const SizedBox(height: 70,),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 2000), 
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed("/RegisterPage");
+                        },
+                        child: const Text("No account? Register now", style: TextStyle(fontSize: 19, color: Color.fromRGBO(143, 148, 251, 1)),)
+                      )
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
-      ),
+      )
     );
   }
 
@@ -175,5 +246,4 @@ class _LoginPageState extends State<LoginPage> {
       fontSize: 16.0                    
     );
   }
-  
 }
