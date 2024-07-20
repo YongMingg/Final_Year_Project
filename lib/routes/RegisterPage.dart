@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,239 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 400,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('img/home_background.png'),
+                  fit: BoxFit.fill
+                )
+              ),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    left: 30,
+                    width: 80,
+                    height: 200,
+                    child: FadeInUp(
+                      duration: const Duration(milliseconds: 500), 
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('img/light_1.png')
+                          )
+                        ),
+                      )
+                    ),
+                  ),
+                  Positioned(
+                    left: 140,
+                    width: 80,
+                    height: 150,
+                    child: FadeInUp(
+                      duration: const Duration(milliseconds: 600), 
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('img/light_2.png')
+                          )
+                        ),
+                      )
+                    ),
+                  ),
+                  Positioned(
+                    right: 40,
+                    top: 40,
+                    width: 80,
+                    height: 150,
+                    child: FadeInUp(
+                      duration: const Duration(milliseconds: 750), 
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('img/clock.png')
+                          )
+                        ),
+                      )
+                    ),
+                  ),
+                  Positioned(
+                    child: FadeInUp(
+                      duration: const Duration(milliseconds: 800), 
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: const Center(
+                          child: Text("Register", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
+                        ),
+                      )
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                children: <Widget>[
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 900), 
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color.fromRGBO(143, 148, 251, 1)),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromRGBO(143, 148, 251, .2),
+                            blurRadius: 20.0,
+                            offset: Offset(0, 10)
+                          )
+                        ]
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
+                            ),
+                            child: TextField(
+                              controller: emailController,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Email",
+                                hintStyle: TextStyle(color: Colors.grey)
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
+                            ),
+                            child: TextField(
+                              controller: passwordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Password",
+                                hintStyle: TextStyle(color: Colors.grey)
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: confirmpasswordController,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Confirm Password",
+                                hintStyle: TextStyle(color: Colors.grey)
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ),
+                  const SizedBox(height: 60,),
+        
+                  //register button
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1000), 
+                    child: InkWell(
+                      onTap: () {
+        
+                        //register account                          
+                        if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && confirmpasswordController.text.isNotEmpty) {
+                          if (passwordController.text == confirmpasswordController.text) {
+                            _register();
+                          } else {
+                            _toast(msg: "Password and Confirm Password is different");
+                          }
+                        }else{
+                          //toast to tell user
+                          _toast(msg: "Input cannot be empty");
+                        }
+        
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromRGBO(143, 148, 251, 1),
+                              Color.fromRGBO(143, 148, 251, .6),
+                            ]
+                          )
+                        ),
+                        child: const Center(
+                          child: Text("Register", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 100,),
+        
+                  //register button
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1000), 
+                    child: InkWell(
+                      onTap: () {
+        
+                        Get.offNamed("/LoginPage");
+        
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color.fromRGBO(143, 148, 251, 1),
+                              Color.fromRGBO(143, 148, 251, .6),
+                            ]
+                          )
+                        ),
+                        child: const Center(
+                          child: Text("Back to Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      )
+    );
+
+
+    /*
+    return Scaffold(
 
       //Appbar title
       appBar: AppBar(
-        backgroundColor: Colors.blue,  
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(78, 84, 198, 1),
+                Color.fromRGBO(125, 130, 237, .8),
+              ]
+            ),
+          ),
+        ),
         title: const Text(
           "Register",
           style: TextStyle(
@@ -111,7 +341,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
-    );
+    ); */
   }
 
   Future<void> _register() async{
