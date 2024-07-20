@@ -30,9 +30,26 @@ class _AddDevicePageState extends State<AddDevicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      //Appbar title
       appBar: AppBar(
-        backgroundColor: Colors.blue,  
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white, size: 30,),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(78, 84, 198, 1),
+                Color.fromRGBO(125, 130, 237, 1),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              transform: GradientRotation(0.3),
+            ),
+          ),
+        ),
         title: const Text(
           "Add Device",
           style: TextStyle(

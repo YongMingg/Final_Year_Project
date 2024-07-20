@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class DevicePage extends StatefulWidget {
   final DataSnapshot dataSnapshot;
@@ -50,7 +51,25 @@ class _DevicePageState extends State<DevicePage> {
       
       //Appbar title
       appBar: AppBar(
-        backgroundColor: Colors.blue,  
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white, size: 30,),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(78, 84, 198, 1),
+                Color.fromRGBO(125, 130, 237, 1),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              transform: GradientRotation(0.3),
+            ),
+          ),
+        ),
         title: const Text(
           "Control Device",
           style: TextStyle(

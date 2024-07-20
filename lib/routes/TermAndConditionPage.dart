@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:get/get.dart';
+
 class TermAndConditionPage extends StatelessWidget {
 
 
@@ -9,8 +11,27 @@ class TermAndConditionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(Icons.arrow_back, color: Colors.white, size: 30,),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(78, 84, 198, 1),
+                Color.fromRGBO(125, 130, 237, 1),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              transform: GradientRotation(0.3),
+            ),
+          ),
+        ),
         title: const Text(
           "Terms & Conditions",
           style: TextStyle(
@@ -20,6 +41,7 @@ class TermAndConditionPage extends StatelessWidget {
           ),
         ),
       ),
+
       body: Padding(
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
         child: SingleChildScrollView(

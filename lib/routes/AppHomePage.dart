@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
-        fixedColor: Colors.blue,
+        fixedColor: const Color.fromRGBO(107, 112, 222, 1),
         type: BottomNavigationBarType.fixed,
         onTap: (index){
           setState(() {
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,   
       floatingActionButton: ClipOval(
         child: FloatingActionButton(
-          backgroundColor: currentIndex == 1? Colors.blue: Colors.grey.shade300,
+          backgroundColor: currentIndex == 1? const Color.fromRGBO(107, 112, 222, 1): Colors.grey.shade300,
           foregroundColor: currentIndex == 1? Colors.white: Colors.grey.shade900,
           child: const Icon(Icons.add_circle_outline),
           onPressed: (){
