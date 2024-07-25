@@ -1,10 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_year_project/routes/DevicePage.dart';
 import 'package:final_year_project/routes/SensorPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class NavHomePage extends StatefulWidget {
   const NavHomePage({super.key});
@@ -46,10 +46,40 @@ class _NavHomePageState extends State<NavHomePage> {
         ),
       ),
 
+      //content
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+
+          //welcome word
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("Welcome Home,", style: TextStyle(fontSize: 16),),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("Users").doc(user!.uid).snapshots(), 
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasData) {
+                      var userData = snapshot.data!.data() as Map<String, dynamic>;
+                      return Text(
+                        userData["Username"], 
+                        style: const TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
+                      );
+                    } else {
+                      return Container(height: 0);
+                    }
+                  },
+                ),
+              ]
+            ),
+          ),
+          
+
           //Connected Devices word
           StreamBuilder(
             stream: FirebaseDatabase.instance.ref("${user!.uid}/devices").onValue,
@@ -223,34 +253,10 @@ class _NavHomePageState extends State<NavHomePage> {
                       return Center(
                         child: Column(
                           children: [
-                            const SizedBox(height: 280,),
+                            SizedBox(height: MediaQuery.of(context).size.height * 0.18,),
                             Image.asset("img/no_device.png",height: 150,),
                             const SizedBox(height: 10,),
                             const Text("No devices or sensors found!", style: TextStyle(fontSize: 17),),
-                            const SizedBox(height: 20,),
-                            //Add Device button
-                            /*
-                            Padding(
-                              padding: const EdgeInsets.only(left: 120, right: 120),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: SizedBox(
-                                      height: 45,
-                                      child: ElevatedButton(
-                                        style: const ButtonStyle(
-                                          backgroundColor: WidgetStatePropertyAll(Colors.purple),
-                                          foregroundColor: WidgetStatePropertyAll(Colors.white),
-                                        ),
-                                        child: const Text("Add Device", style: TextStyle(fontSize: 19),), 
-                                        onPressed: (){}, 
-                                      ),
-                                    ), 
-                                  ),
-                                ],
-                              ),
-                            ),     */
                           ],
                         ),
                       );

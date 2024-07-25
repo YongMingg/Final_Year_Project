@@ -63,75 +63,119 @@ class _AddSensorPageState extends State<AddSensorPage> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.only(left: 80, right: 80),
+        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                controller: sensorNameController,
-                decoration: const InputDecoration(
-                  labelText: "Device Name",
-                  hintText: "E.g. Luminance sensor",
-                  hintStyle: TextStyle(color: Colors.grey,)
+              
+              //device name text field
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color.fromRGBO(143, 148, 251, 1), width: 1.5),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(143, 148, 251, .2),
+                      blurRadius: 20.0,
+                      offset: Offset(0, 10)
+                    )
+                  ]
+                ),
+                child: TextField(
+                  controller: sensorNameController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Device Name",
+                    hintStyle: TextStyle(color: Colors.grey)
+                  ),
                 ),
               ),
               const SizedBox(height: 80,),
 
+              //dropdownmenu
               DropdownMenu(
-                width: 290,
+                width: MediaQuery.of(context).size.width * 0.7,
                 label: const Text("Pin Number"),
                 helperText: "Select the Pin of your sensor",
-                dropdownMenuEntries: availablePinsIsEmpty ? [const DropdownMenuEntry(value: 0, label: "No Available Pins")] : availablePins.map((pin) => DropdownMenuEntry(value: pin, label: "PIN $pin")).toList(),
+                dropdownMenuEntries: availablePinsIsEmpty 
+                    ? [const DropdownMenuEntry(value: 0, label: "No Available Pins")] 
+                    : availablePins.map((pin) {
+                        return DropdownMenuEntry(
+                          value: pin,
+                          label: "PIN $pin",
+                          enabled: pin == availablePins.first,
+                        );
+                      }).toList(),
                 onSelected: (value) {
-                  seletedValue = value!;
+                  if (value != null && value == availablePins.first) {
+                    setState(() {
+                      seletedValue = value;
+                    });
+                  }
                 },
               ),
               const SizedBox(height: 80,),
-              
-              //button
-              Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: SizedBox(
-                        height: 45,
-                        child: ElevatedButton.icon(
-                          style: const ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(Colors.purple),
-                            foregroundColor: WidgetStatePropertyAll(Colors.white),
-                          ),
-                          label: const Text("Add Device", style: TextStyle(fontSize: 19),), 
-                          icon: const Icon(Icons.add_box_outlined),
-                          onPressed: (){
-                            User? user = FirebaseAuth.instance.currentUser;
+
+              //add sensor button
+              InkWell(
+                onTap: () {
+                  
+                  User? user = FirebaseAuth.instance.currentUser;
                             
-                            if(sensorNameController.text.isNotEmpty && seletedValue != 0){
-                              if(user != null){
-                                FirebaseDatabase.instance.ref("${user.uid}/sensors").child("PIN_$seletedValue").set({
-                                  "DeviceName": sensorNameController.text,
-                                  "Data": 0,
-                                  "Data2": 0,
-                                });
-                                _toast(msg: "Device added successfully");
-                                Get.back();
-                              }
-                            }else if(sensorNameController.text.isEmpty){
-                              _toast(msg: "Please enter a device name");
-                            }else if(seletedValue == 0 && availablePinsIsEmpty == true){
-                              _toast(msg: "No Pin available.");
-                            }else{
-                              _toast(msg: "Please select a pin number");
-                            }
-                          }, 
-                        ),
-                      ), 
+                  if(sensorNameController.text.isNotEmpty && seletedValue != 0){
+                    if(user != null){
+                      FirebaseDatabase.instance.ref("${user.uid}/sensors").child("PIN_$seletedValue").set({
+                        "DeviceName": sensorNameController.text,
+                        "Data": 0,
+                        "Data2": 0,
+                      });
+                      _toast(msg: "Device added successfully");
+                      Get.back();
+                    }
+                  }else if(sensorNameController.text.isEmpty){
+                    _toast(msg: "Please enter a device name");
+                  }else if(seletedValue == 0 && availablePinsIsEmpty == true){
+                    _toast(msg: "No Pin available.");
+                  }else{
+                    _toast(msg: "Please select a pin number");
+                  }
+
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromRGBO(143, 148, 251, 1),
+                        Color.fromRGBO(143, 148, 251, .7),
+                      ]
                     ),
-                  ],
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromRGBO(143, 148, 251, .2),
+                        blurRadius: 20.0,
+                        offset: Offset(0, 10)
+                      )
+                    ]
+                  ),
+                  child: const Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add, size: 25, color: Colors.white,),
+                        SizedBox(width: 10,),
+                        Text("Add Sensor", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                        SizedBox(width: 10,),
+                      ],
+                    ),
+                  ),
                 ),
               ),
+              
             ],
           ),
         ),

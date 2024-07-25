@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           children: <Widget>[
             Container(
-              height: 400,
+              height: 300,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('img/home_background.png'),
@@ -163,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     )
                   ),
-                  const SizedBox(height: 60,),
+                  const SizedBox(height: 40,),
         
                   //register button
                   FadeInUp(
@@ -202,9 +202,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 100,),
+                  const SizedBox(height: 40,),
         
-                  //register button
+                  //back button
                   FadeInUp(
                     duration: const Duration(milliseconds: 1000), 
                     child: InkWell(

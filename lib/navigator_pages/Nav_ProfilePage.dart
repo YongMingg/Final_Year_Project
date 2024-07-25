@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../routes/0_routes_lib.dart';
+import 'dart:ui' as ui;
 
 class NavProfilePage extends StatefulWidget {
   const NavProfilePage({super.key});
@@ -16,6 +17,7 @@ class _NavProfilePageState extends State<NavProfilePage> {
 
   User? user = FirebaseAuth.instance.currentUser;
   TextEditingController renameUsernameController = TextEditingController();
+  double WIDTH = 300;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class _NavProfilePageState extends State<NavProfilePage> {
       ),
 
       body: Column(
-        children: [
+        children: [          
           SingleChildScrollView(
             child: Column(
               children: [
@@ -91,6 +93,8 @@ class _NavProfilePageState extends State<NavProfilePage> {
               ],
             ),
           ),
+
+          //action list
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: ListView(

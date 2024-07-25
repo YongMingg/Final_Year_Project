@@ -61,83 +61,126 @@ class _AddDevicePageState extends State<AddDevicePage> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.only(left: 80, right: 80),
+        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                controller: deviceNameController,
-                decoration: const InputDecoration(
-                  labelText: "Device Name",
-                  hintText: "E.g. Smart Light",
-                  hintStyle: TextStyle(color: Colors.grey,)
+              
+              //device name textfield
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color.fromRGBO(143, 148, 251, 1), width: 1.5),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(143, 148, 251, .2),
+                      blurRadius: 20.0,
+                      offset: Offset(0, 10)
+                    )
+                  ]
+                ),
+                child: TextField(
+                  controller: deviceNameController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Device Name",
+                    hintStyle: TextStyle(color: Colors.grey)
+                  ),
                 ),
               ),
               const SizedBox(height: 80,),
 
+              //dropdownmenu
               DropdownMenu(
-                width: 290,
+                width: MediaQuery.of(context).size.width * 0.7,
                 label: const Text("Pin Number"),
                 helperText: "Select the Pin of your device",
-                dropdownMenuEntries: availablePinsIsEmpty ? [const DropdownMenuEntry(value: 0, label: "No Available Pins")] : availablePins.map((pin) => DropdownMenuEntry(value: pin, label: "PIN $pin")).toList(),
+                dropdownMenuEntries: availablePinsIsEmpty 
+                    ? [const DropdownMenuEntry(value: 0, label: "No Available Pins")] 
+                    : availablePins.map((pin) {
+                        return DropdownMenuEntry(
+                          value: pin,
+                          label: "PIN $pin",
+                          enabled: pin == availablePins.first,
+                        );
+                      }).toList(),
                 onSelected: (value) {
-                  seletedValue = value!;
+                  if (value != null && value == availablePins.first) {
+                    setState(() {
+                      seletedValue = value;
+                    });
+                  }
                 },
               ),
               const SizedBox(height: 80,),
-              
-              //button
-              Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: SizedBox(
-                        height: 45,
-                        child: ElevatedButton.icon(
-                          style: const ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(Colors.purple),
-                            foregroundColor: WidgetStatePropertyAll(Colors.white),
-                          ),
-                          label: const Text("Add Device", style: TextStyle(fontSize: 19),), 
-                          icon: const Icon(Icons.add_box_outlined),
-                          onPressed: (){
-                            User? user = FirebaseAuth.instance.currentUser;
+
+              //add device button
+              InkWell(
+                onTap: () {
+                  
+                  User? user = FirebaseAuth.instance.currentUser;
                             
-                            if(deviceNameController.text.isNotEmpty && seletedValue != 0){
-                              if(user != null){
+                  if(deviceNameController.text.isNotEmpty && seletedValue != 0){
+                    if(user != null){
 
-                                //add data to realtime database
-                                FirebaseDatabase.instance.ref("${user.uid}/devices").child("PIN_$seletedValue").set({
-                                  "DeviceName": deviceNameController.text,
-                                  "Analog": 255,
-                                  "Digital": false,
-                                });
+                      //add data to realtime database
+                      FirebaseDatabase.instance.ref("${user.uid}/devices").child("PIN_$seletedValue").set({
+                        "DeviceName": deviceNameController.text,
+                        "Analog": 255,
+                        "Digital": false,
+                      });
 
-                                //update counter of user in the Firestore
-                                FirebaseFirestore.instance.collection("Users").doc(user.uid).get().then((value) {
-                                  int counter = value.get("Counter") as int;
-                                  FirebaseFirestore.instance.collection("Users").doc(user.uid).update({
-                                    "Counter": ++counter,
-                                  });
-                                });
-                                
-                                
-                                _toast(msg: "Device added successfully");
-                                Get.back();
-                              }
-                            }else if(deviceNameController.text.isEmpty){
-                              _toast(msg: "Please enter a device name");
-                            }else if(seletedValue == 0){
-                              _toast(msg: "Please select a pin number");
-                            }
-                          }, 
-                        ),
-                      ), 
+                      //update counter of user in the Firestore
+                      FirebaseFirestore.instance.collection("Users").doc(user.uid).get().then((value) {
+                        int counter = value.get("Counter") as int;
+                        FirebaseFirestore.instance.collection("Users").doc(user.uid).update({
+                          "Counter": ++counter,
+                        });
+                      });
+
+                      //show toast message
+                      _toast(msg: "Device added successfully");
+                      Get.back();
+                    }
+                  }else if(deviceNameController.text.isEmpty){
+                    _toast(msg: "Please enter a device name");
+                  }else if(seletedValue == 0){
+                    _toast(msg: "Please select a pin number");
+                  }
+
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromRGBO(143, 148, 251, 1),
+                        Color.fromRGBO(143, 148, 251, .7),
+                      ]
                     ),
-                  ],
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromRGBO(143, 148, 251, .2),
+                        blurRadius: 20.0,
+                        offset: Offset(0, 10)
+                      )
+                    ]
+                  ),
+                  child: const Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add, size: 25, color: Colors.white,),
+                        SizedBox(width: 10,),
+                        Text("Add Device", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+                        SizedBox(width: 10,),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

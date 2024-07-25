@@ -69,14 +69,14 @@ class _NavAddDevicePageState extends State<NavAddDevicePage> {
       padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
       height: 120,
       decoration: BoxDecoration(
-        color:Colors.grey.shade300,
+        color:const Color.fromRGBO(180, 183, 252, 1),
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Color.fromRGBO(188, 191, 253, .5),
             spreadRadius: 5,
             blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
