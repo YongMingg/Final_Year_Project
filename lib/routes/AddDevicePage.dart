@@ -96,6 +96,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                             int pin = int.tryParse(pinController.text) ?? 0;
                             pin == 0 ? null : availablePins.add(pin);
                             pinController.clear();
+                            _toast(msg: "Add Pin $pin Success");
 
                             Navigator.of(context).pop();
                           }, 
@@ -157,6 +158,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                             if (selectedPin != null) {
                               setState(() {
                                 availablePins.remove(selectedPin);
+                                _toast(msg: "Delete Pin $selectedPin Success");
                                 selectedPin = null; // Reset the selected pin
                               });
                             }
