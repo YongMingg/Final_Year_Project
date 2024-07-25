@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../routes/0_routes_lib.dart';
-import 'dart:ui' as ui;
 
 class NavProfilePage extends StatefulWidget {
   const NavProfilePage({super.key});
