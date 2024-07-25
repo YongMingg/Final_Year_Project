@@ -14,9 +14,10 @@ class AddDevicePage extends StatefulWidget {
 
 class _AddDevicePageState extends State<AddDevicePage> {
 
+  TextEditingController pinController = TextEditingController();  //Pin controllers
   TextEditingController deviceNameController = TextEditingController();  //Text controllers
   int seletedValue = 0;
-  List<int> availablePins = [15, 2, 4, 16, 17, 5]; // Initial available pins
+  List<int> availablePins = [15, 2, 4, 16, 17]; // Initial available pins
   User? user = FirebaseAuth.instance.currentUser;
   bool availablePinsIsEmpty = false;
 
@@ -58,6 +59,121 @@ class _AddDevicePageState extends State<AddDevicePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert, size: 30, color: Colors.white,),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: const Text("Add PIN", style: TextStyle(fontSize: 16,)),
+                onTap: () {
+
+                  //show add pin dialog
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      title: const Text("Add PIN"),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const Text("Please enter the PIN number that have on the board"),
+                            TextField(
+                              keyboardType: TextInputType.number,
+                              controller: pinController,
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: (){
+                            Navigator.of(context).pop("Cancel");  //make the dialog disappear and transfer message
+                          }, 
+                          child: const Text("Cancel")
+                        ),
+                        TextButton(
+                          onPressed: (){
+
+                            //add the pin to the list
+                            int pin = int.tryParse(pinController.text) ?? 0;
+                            pin == 0 ? null : availablePins.add(pin);
+                            pinController.clear();
+
+                            Navigator.of(context).pop();
+                          }, 
+                          child: const Text("Add")
+                        ),
+                      ],
+                    );
+                  });
+
+                },
+              ),
+              PopupMenuItem(
+                child: const Text("Delete PIN", style: TextStyle(fontSize: 16,)),
+                onTap: () {
+                  int? selectedPin;
+
+                  //show delete pin dialog
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      title: const Text("Delete PIN"),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const Text("Please select the PIN number that want to delete"),
+                            const Row(children: [Text("*On used PIN cannot delete",)]),
+                            const SizedBox(height: 20,),
+                            DropdownMenu(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              label: const Text("Pin Number"),
+                              dropdownMenuEntries: availablePinsIsEmpty 
+                                  ? [const DropdownMenuEntry(value: 0, label: "No Available Pins Delete")] 
+                                  : availablePins.map((pin) {
+                                      return DropdownMenuEntry(
+                                        value: pin,
+                                        label: "PIN $pin",
+                                      );
+                                    }).toList(),
+                              onSelected: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    selectedPin = value;
+                                  });
+                                }
+                              },
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: (){
+                            Navigator.of(context).pop("Cancel");  //make the dialog disappear and transfer message
+                          }, 
+                          child: const Text("Cancel")
+                        ),
+                        TextButton(
+                          onPressed: (){  
+                            if (selectedPin != null) {
+                              setState(() {
+                                availablePins.remove(selectedPin);
+                                selectedPin = null; // Reset the selected pin
+                              });
+                            }
+
+                            Navigator.of(context).pop();
+                          }, 
+                          child: const Text("Delete")
+                        ),
+                      ],
+                    );
+                  });
+
+                },
+              ),
+            ],
+          ),
+        ],
       ),
 
       body: Padding(
