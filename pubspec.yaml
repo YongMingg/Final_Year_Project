@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   animate_do: ^3.1.2
+  alan_voice: 3.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
