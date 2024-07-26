@@ -153,15 +153,15 @@ class _DevicePageState extends State<DevicePage> {
                           child: const Text("No")
                         ),
                         TextButton(
-                          onPressed: (){
+                          onPressed: () async{
 
                             //delete data from database
-                            FirebaseDatabase.instance.ref("${user!.uid}/devices/${widget.dataSnapshot.key}").remove().then((onValue){
+                            await FirebaseDatabase.instance.ref("${user!.uid}/devices/${widget.dataSnapshot.key}").remove().then((onValue){
 
                               FirebaseFirestore.instance.collection("Users").doc(user!.uid).get().then((value) {
-                                int counter = value.get("Counter") as int;
+                                int counter = value.get("DeviceCounter") as int;
                                 FirebaseFirestore.instance.collection("Users").doc(user!.uid).update({
-                                  "Counter": --counter,
+                                  "DeviceCounter": --counter,
                                 });
                               });
 

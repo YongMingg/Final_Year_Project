@@ -253,8 +253,11 @@ class _RegisterPageState extends State<RegisterPage> {
           "Id": uid,
           "Email": emailController.text,
           "Username": "user#${uid.substring(0, 4)}",
-          "Counter": "0",
           "LoginStatus": false,
+          "DeviceCounter": 0,
+          "SensorCounter": 0,
+          "DeviceArray": [15, 2, 4, 16, 17],
+          "SensorArray": [36],
         };
         FirebaseFirestore.instance.collection("Users").doc(uid).set(userInfo);
       }

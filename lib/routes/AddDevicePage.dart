@@ -17,14 +17,27 @@ class _AddDevicePageState extends State<AddDevicePage> {
   TextEditingController pinController = TextEditingController();  //Pin controllers
   TextEditingController deviceNameController = TextEditingController();  //Text controllers
   int seletedValue = 0;
-  List<int> availablePins = [15, 2, 4, 16, 17]; // Initial available pins
+  List<int> availablePins = []; // Initial available pins
+  List<int> showPins = []; // Initial show pins
   User? user = FirebaseAuth.instance.currentUser;
-  bool availablePinsIsEmpty = false;
+  bool showPinsIsEmpty = false;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _fetchChosenPins();
+
+    _initializePins();
+  }
+
+  Future<void> _initializePins() async {
+    //fetch the pins from the database
+    await _fetchPinsFromFirebase();
+    //dont show the pin that in used
+    await _fetchChosenPins();
+
+    setState(() {
+      showPinsIsEmpty = showPins.isEmpty;
+    });
   }
 
   @override
@@ -90,14 +103,26 @@ class _AddDevicePageState extends State<AddDevicePage> {
                           child: const Text("Cancel")
                         ),
                         TextButton(
-                          onPressed: (){
+                          onPressed: () async{
 
                             //add the pin to the list
                             int pin = int.tryParse(pinController.text) ?? 0;
-                            pin == 0 ? null : availablePins.add(pin);
+
+                            if (pin != 0) {
+                              availablePins.add(pin); 
+                              showPins.add(pin);
+                            } else {
+                              _toast(msg: "Invalid Pin");
+                            }
+
+                            //update data to database
+                            await FirebaseFirestore.instance.collection("Users").doc(user!.uid).update({
+                              "DeviceArray": availablePins,
+                            }).then((e) => setState(() {_fetchChosenPins();}));
+
+                            //show toast message
                             pinController.clear();
                             _toast(msg: "Add Pin $pin Success");
-
                             Navigator.of(context).pop();
                           }, 
                           child: const Text("Add")
@@ -126,9 +151,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
                             DropdownMenu(
                               width: MediaQuery.of(context).size.width * 0.6,
                               label: const Text("Pin Number"),
-                              dropdownMenuEntries: availablePinsIsEmpty 
+                              dropdownMenuEntries: showPinsIsEmpty 
                                   ? [const DropdownMenuEntry(value: 0, label: "No Available Pins Delete")] 
-                                  : availablePins.map((pin) {
+                                  : showPins.map((pin) {
                                       return DropdownMenuEntry(
                                         value: pin,
                                         label: "PIN $pin",
@@ -154,13 +179,23 @@ class _AddDevicePageState extends State<AddDevicePage> {
                           child: const Text("Cancel")
                         ),
                         TextButton(
-                          onPressed: (){  
+                          onPressed: () {  
                             if (selectedPin != null) {
                               setState(() {
                                 availablePins.remove(selectedPin);
+                                showPins.remove(selectedPin);
+
+                                //update data to database
+                                FirebaseFirestore.instance.collection("Users").doc(user!.uid).update({
+                                  "DeviceArray": availablePins,
+                                }).then((e) => setState(() {_fetchChosenPins();}));
+
+                                //show toast message
                                 _toast(msg: "Delete Pin $selectedPin Success");
                                 selectedPin = null; // Reset the selected pin
                               });
+                            }else{
+                              _toast(msg: "No Pin Selected");
                             }
 
                             Navigator.of(context).pop();
@@ -216,17 +251,17 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 width: MediaQuery.of(context).size.width * 0.7,
                 label: const Text("Pin Number"),
                 helperText: "Select the Pin of your device",
-                dropdownMenuEntries: availablePinsIsEmpty 
+                dropdownMenuEntries: showPinsIsEmpty 
                     ? [const DropdownMenuEntry(value: 0, label: "No Available Pins")] 
-                    : availablePins.map((pin) {
+                    : showPins.map((pin) {
                         return DropdownMenuEntry(
                           value: pin,
                           label: "PIN $pin",
-                          enabled: pin == availablePins.first,
+                          enabled: pin == showPins.first,
                         );
                       }).toList(),
                 onSelected: (value) {
-                  if (value != null && value == availablePins.first) {
+                  if (value != null && value == showPins.first) {
                     setState(() {
                       seletedValue = value;
                     });
@@ -237,7 +272,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
               //add device button
               InkWell(
-                onTap: () {
+                onTap: () async{
                   
                   User? user = FirebaseAuth.instance.currentUser;
                             
@@ -245,17 +280,17 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     if(user != null){
 
                       //add data to realtime database
-                      FirebaseDatabase.instance.ref("${user.uid}/devices").child("PIN_$seletedValue").set({
+                      await FirebaseDatabase.instance.ref("${user.uid}/devices").child("PIN_$seletedValue").set({
                         "DeviceName": deviceNameController.text,
                         "Analog": 255,
                         "Digital": false,
                       });
 
                       //update counter of user in the Firestore
-                      FirebaseFirestore.instance.collection("Users").doc(user.uid).get().then((value) {
-                        int counter = value.get("Counter") as int;
+                      await FirebaseFirestore.instance.collection("Users").doc(user.uid).get().then((value) {
+                        int counter = value.get("DeviceCounter") as int;
                         FirebaseFirestore.instance.collection("Users").doc(user.uid).update({
-                          "Counter": ++counter,
+                          "DeviceCounter": ++counter,
                         });
                       });
 
@@ -336,16 +371,33 @@ class _AddDevicePageState extends State<AddDevicePage> {
           // Remove chosen pins from available pins
           for (var key in devices.keys) {
             int pin = int.parse(key.toString().split('_')[1]);
-            availablePins.remove(pin);
+            showPins.remove(pin);
           }
         });
       }
     }
 
-    if(availablePins.isEmpty){
-      availablePinsIsEmpty = true;
+    if(showPins.isEmpty){
+      showPinsIsEmpty = true;
     }else{
-      availablePinsIsEmpty = false;
+      showPinsIsEmpty = false;
     }
+  }
+
+  Future<void> _fetchPinsFromFirebase() async {
+    await FirebaseFirestore.instance.collection("Users").doc(user!.uid).get().then((DocumentSnapshot documentSnapshot){
+      if (documentSnapshot.exists) {
+        List<int> availablePinsInFb = List<int>.from(documentSnapshot.get("DeviceArray"));
+        setState(() {
+          availablePins = availablePinsInFb;
+          showPins = List<int>.from(availablePinsInFb);
+        });
+      }else {
+        debugPrint("Document does not exist");
+      }
+    }).catchError((error) {
+      // Handle errors 
+      debugPrint("Error fetching document: $error");
+    });
   }
 }

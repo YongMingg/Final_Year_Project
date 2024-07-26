@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -131,6 +132,14 @@ class _SensorPageState extends State<SensorPage> {
                         TextButton(
                           onPressed: (){
                             FirebaseDatabase.instance.ref("${user!.uid}/sensors/${widget.dataSnapshot.key}").remove().then((onValue){
+
+                              FirebaseFirestore.instance.collection("Users").doc(user!.uid).get().then((value) {
+                                int counter = value.get("SensorCounter") as int;
+                                FirebaseFirestore.instance.collection("Users").doc(user!.uid).update({
+                                  "SensorCounter": --counter,
+                                });
+                              });
+
                               _toast(msg: "Device delete successful");
                               Navigator.of(context).pop();  //make the dialog disappear and transfer message
                               Navigator.of(context).pop();
