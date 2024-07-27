@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:final_year_project/alanAi/alanAi.dart';
 import 'package:flutter/material.dart';
 import '../navigator_pages/pages_lib.dart';
 
@@ -22,10 +22,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    //test here
-    User? user = FirebaseAuth.instance.currentUser;
-    print("User UID: ${user!.uid}");
-
+    Alanai();
   }
 
   @override
