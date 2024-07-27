@@ -1,3 +1,4 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -199,6 +200,7 @@ class _NavProfilePageState extends State<NavProfilePage> {
                                 //logout and goto login page
                                 await FirebaseAuth.instance.signOut().then((onValue) {
                                   FirebaseFirestore.instance.collection("Users").doc(user!.uid).update({"LoginStatus": false});
+                                  AlanVoice.removeButton();  //remove the alan button
                                   Get.offNamed("/LoginPage");
                                 });
               
