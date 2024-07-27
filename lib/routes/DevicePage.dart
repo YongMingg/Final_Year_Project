@@ -232,7 +232,7 @@ class _DevicePageState extends State<DevicePage> {
                     onTap: (){
                       setState(() {
                         isButtonOn = !isButtonOn;
-                        FirebaseDatabase.instance.ref("${user!.uid}/devices/${snapshot.key}").update({"Digital": (!isButtonOn).toString()});
+                        FirebaseDatabase.instance.ref("${user!.uid}/devices/${snapshot.key}").update({"Digital": (!isButtonOn)});
                       });
                       
                     },
