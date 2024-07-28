@@ -1,4 +1,4 @@
-import 'package:final_year_project/alanAi/alanAi.dart';
+import 'package:final_year_project/alanAi/AlanAi.dart';
 import 'package:flutter/material.dart';
 import '../navigator_pages/pages_lib.dart';
 
