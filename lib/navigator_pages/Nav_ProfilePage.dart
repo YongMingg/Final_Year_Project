@@ -72,13 +72,31 @@ class _NavProfilePageState extends State<NavProfilePage> {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              "Username: ", 
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                            const Expanded(
+                              child: Text(
+                                "Username: ", 
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.right,
+                              ),
                             ),
-                            Text(
-                              userData["Username"], 
-                              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                            // Text(
+                            //   userData["Username"], 
+                            //   style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    userData["Username"],
+                                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.left,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis, // optional, in case it still overflows
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         );

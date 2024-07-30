@@ -64,7 +64,7 @@ class _NavHomePageState extends State<NavHomePage> {
                     stream: FirebaseFirestore.instance.collection("Users").doc(user!.uid).snapshots(), 
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Container();
                       } else if (snapshot.hasData) {
                         var userData = snapshot.data!.data() as Map<String, dynamic>;
                         return Text(
@@ -108,7 +108,7 @@ class _NavHomePageState extends State<NavHomePage> {
                 stream: FirebaseDatabase.instance.ref("${user!.uid}/devices").onValue,
                 builder: (context, AsyncSnapshot<DatabaseEvent> event) {
                   if (event.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Container();
                   } else if (event.hasData && event.data!.snapshot.value != null) {
                     return Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -195,7 +195,7 @@ class _NavHomePageState extends State<NavHomePage> {
                 stream: FirebaseDatabase.instance.ref("${user!.uid}/sensors").onValue,
                 builder: (context, AsyncSnapshot<DatabaseEvent> event) {
                   if (event.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Container();
                   } else if (event.hasData && event.data!.snapshot.value != null) {
                     return Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
