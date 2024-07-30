@@ -79,11 +79,6 @@ class _NavProfilePageState extends State<NavProfilePage> {
                                 textAlign: TextAlign.right,
                               ),
                             ),
-                            // Text(
-                            //   userData["Username"], 
-                            //   style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                            //   overflow: TextOverflow.ellipsis,
-                            // ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

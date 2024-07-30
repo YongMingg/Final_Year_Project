@@ -74,21 +74,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  //checking user login or not
-  // Future<void> _checkAuthState() async {
-  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
-  //     if (user == null) {
-  //       setState(() {
-  //         _initialRoute = '/LoginPage';
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _initialRoute = '/HomePage';
-  //       });
-  //     }
-  //   });
-  // }
-
   Future<void> _runCodeOnAppOn() async{
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
