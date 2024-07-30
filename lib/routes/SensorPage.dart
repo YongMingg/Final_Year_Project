@@ -162,6 +162,7 @@ class _SensorPageState extends State<SensorPage> {
           query: FirebaseDatabase.instance.ref("${user!.uid}/sensors"),
           itemBuilder: (context, snapshot, animation, index) {
             if (index == widget.index) {
+              String? pinKey = snapshot.key;
               return Column(
                 children: [
 
@@ -186,11 +187,46 @@ class _SensorPageState extends State<SensorPage> {
                                     padding: const EdgeInsets.only(bottom: 10),
                                     child: _showText(title: "Sensor Name: ", text: snapshot.child("DeviceName").value.toString()),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: _showText(title: "ldrData: ", text: snapshot.child("Data").value.toString()),
+
+                                  //based on different pin show different data
+                                  pinKey == "PIN_36" ? 
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: _showText(title: "Ldr Data: ", text: snapshot.child("Data").value.toString()),
+                                      ),
+                                      _showText(title: "Voltage(V): ", text: "${snapshot.child("Data2").value.toString()} V"), 
+                                    ],
+                                  )
+                                  : pinKey == "PIN_26" ?
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: _showText(title: "Temperature(°C): ", text: "${snapshot.child("Data").value.toString()} °C"),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: _showText(title: "Temperature(°F): ", text: "${(((double.parse(snapshot.child("Data").value.toString())) * 1.8) + 32).toString()} °F"),
+                                      ),
+                                      _showText(title: "Humidity: ", text: "${snapshot.child("Data2").value.toString()} %"), 
+                                    ],
+                                  )
+                                  :
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: _showText(title: "Data: ", text: snapshot.child("Data").value.toString()),
+                                      ),
+                                      _showText(title: "Data2: ", text: snapshot.child("Data2").value.toString()), 
+                                    ],
                                   ),
-                                  _showText(title: "Voltage(V): ", text: snapshot.child("Data2").value.toString()),
+                                  
                                 ],
                               ),
                             ),
@@ -199,7 +235,6 @@ class _SensorPageState extends State<SensorPage> {
                       ]
                     ),
                   ),
-
                 ]
               );
             }else{

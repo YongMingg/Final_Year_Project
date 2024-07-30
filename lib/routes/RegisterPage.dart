@@ -257,7 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
           "DeviceCounter": 0,
           "SensorCounter": 0,
           "DeviceArray": [15, 2, 4, 16, 17],
-          "SensorArray": [36],
+          "SensorArray": [36, 26],
         };
         FirebaseFirestore.instance.collection("Users").doc(uid).set(userInfo);
       }
