@@ -256,7 +256,7 @@ class _AddSensorPageState extends State<AddSensorPage> {
                     : showPins.map((pin) {
                         return DropdownMenuEntry(
                           value: pin,
-                          label: "PIN $pin" == "PIN 36" ? "PIN $pin (LDR Sensor)" : "PIN $pin" == "PIN 26" ? "PIN $pin (Humidity & Temperature Sensor)" : "PIN $pin",
+                          label: "PIN $pin" == "PIN 36" ? "PIN $pin (LDR Sensor)" : "PIN $pin" == "PIN 26" ? "PIN $pin (Humidity & Temperature Sensor)" : "PIN $pin" == "PIN 40" ? "PIN $pin (Camera)" : "PIN $pin",
                         );
                       }).toList(),
                 onSelected: (value) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -22,6 +24,7 @@ class _SensorPageState extends State<SensorPage> {
   TextEditingController renameDeviceController = TextEditingController();
   TextEditingController renamedDeviceController = TextEditingController();
   bool isRenamed = false;
+  String? _previousImage;
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +218,8 @@ class _SensorPageState extends State<SensorPage> {
                                       _showText(title: "Humidity: ", text: "${snapshot.child("Data2").value.toString()} %"), 
                                     ],
                                   )
+                                  : pinKey == "PIN_40" ?
+                                  Container(height: 0,)
                                   :
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,6 +240,22 @@ class _SensorPageState extends State<SensorPage> {
                       ]
                     ),
                   ),
+
+                  pinKey == "PIN_40" ?
+                  Center(
+                    child: StreamBuilder(
+                      stream: FirebaseDatabase.instance.ref("esp32cam/${user!.uid}").child("photo").onValue,
+                      builder: (context, snapshot){
+                        if(snapshot.hasData){
+                          return displayBase64Image(snapshot.data!.snapshot.value.toString());
+                        }else{
+                          return const Text("No camera available");
+                        }
+                      }
+                    )
+                  )
+                  :
+                  const SizedBox(height: 0,),
                 ]
               );
             }else{
@@ -285,6 +306,13 @@ class _SensorPageState extends State<SensorPage> {
       backgroundColor: Colors.grey[800],
       textColor: Colors.white,        
       fontSize: 16.0                    
+    );
+  }
+
+  Widget displayBase64Image(String base64Image) {
+    return Image.memory(
+      base64Decode(base64Image),
+      fit: BoxFit.cover,
     );
   }
 }
