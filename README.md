@@ -1,6 +1,6 @@
 # final_year_project
 
-A new Flutter project.
+This is my final year project that use flutter to make an application such as smart home dashboard aplication.
 
 ## Getting Started
 
