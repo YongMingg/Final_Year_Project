@@ -38,7 +38,7 @@ class Alanai {
         userConfigJson = jsonEncode(userConfig);
 
         AlanVoice.addButton(
-          "a3a19cf16683a62f90d980651bf13ed92e956eca572e1d8b807a3e2338fdd0dc/stage",
+          "45d1f7b21b72321a90d980651bf13ed92e956eca572e1d8b807a3e2338fdd0dc/stage",
           server: "v1.alan.app",
           buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT,
           bottomMargin: 40,
